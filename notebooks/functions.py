@@ -338,7 +338,9 @@ def compare_step_durations(df):
 def plot_kpis(error_rate, completion_rate, save_dir="results/plots"):
     """Visualize Error Rate and Completion Rate as bar plots and save figures."""
     sns.set(style="whitegrid", palette="muted", font_scale=1.1)
-    palette = {"Test": "#1f77b4", "Control": "#ff7f0e"}  # Blue = Test, Orange = Control
+
+    # FLIPPED COLORS
+    palette = {"Test": "#ff7f0e", "Control": "#1f77b4"}
 
     os.makedirs(save_dir, exist_ok=True)
 
@@ -384,9 +386,11 @@ def plot_step_durations(df_with, df_clean, save_dir="results/plots"):
     import seaborn as sns
     import matplotlib.pyplot as plt
 
-    # Settings
     sns.set(style="whitegrid", palette="muted", font_scale=1.1)
-    palette = {"Test": "#1f77b4", "Control": "#ff7f0e"}  # Consistent colors
+
+    # FLIPPED COLORS
+    palette = {"Test": "#ff7f0e", "Control": "#1f77b4"}
+
     step_order = ["Start", "Step 1", "Step 2", "Step 3", "Confirm"]
 
     os.makedirs(save_dir, exist_ok=True)
@@ -482,5 +486,3 @@ def plot_step_durations(df_with, df_clean, save_dir="results/plots"):
     plt.tight_layout()
     plt.savefig(os.path.join(save_dir, "step_duration_no_outliers_box.png"), dpi=300, bbox_inches="tight")
     plt.show()
-
-   
