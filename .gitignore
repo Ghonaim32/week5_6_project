@@ -1,0 +1,47 @@
+############################################
+# Python cache / compiled files
+############################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+############################################
+# Virtual environments (never commit)
+############################################
+venv/
+.venv/
+env/
+conda-env/
+.env
+
+############################################
+# Jupyter auto-generated files
+############################################
+.ipynb_checkpoints/
+.notebook_cache/
+
+############################################
+# macOS system junk
+############################################
+.DS_Store
+
+############################################
+# VS Code internal settings (safe to ignore)
+############################################
+.vscode/
+
+############################################
+# Temporary or scratch folders (safe)
+############################################
+tmp/
+scratch/
+export/
+temp/
+.vscode/
+############################################
+# NOTE:
+# We DO NOT ignore *.csv or *.txt
+# because your teammate needs all raw/cleaned data.
+############################################

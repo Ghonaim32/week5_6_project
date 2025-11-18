@@ -1,0 +1,9 @@
+paths:
+  raw: "data/raw/"
+  cleaned: "data/cleaned/"
+  results: "notebooks/results/"
+
+experiment:
+  random_state: 42
+  alpha: 0.05
+  
