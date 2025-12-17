@@ -6,4 +6,3 @@ paths:
 experiment:
   random_state: 42
   alpha: 0.05
-  

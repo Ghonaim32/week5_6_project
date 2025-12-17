@@ -56,7 +56,8 @@ def clean_web_data(df_web_experiment):
         "step_2": 3,
         "step_3": 4,
         "confirm": 5
-    }).astype(int)
+    })
+    df["process_step"] = df["process_step"].astype(int)
 
     # Fix datetime format
     df["date_time"] = pd.to_datetime(df["date_time"], errors="coerce")
@@ -146,7 +147,9 @@ def clean_final(df):
 # ------------------------------------- Analysis--------------------------------
 
 def load_df_raw():
-    df_raw = pd.read_csv(r"/Users/muayadhilamia/Desktop/Ironhack/Week-5/Project/week5_6_project/data/cleaned/df_cleand_raw_m.csv")
+    """Load the cleaned raw dataset from the cleaned data directory."""
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "cleaned"))
+    df_raw = pd.read_csv(os.path.join(base_path, "df_cleand_raw_m.csv"))
     return df_raw
 
 # ---------- DATA CLEANING ----------
@@ -239,6 +242,7 @@ def hypothesis_error_rate(df, alpha=0.05):
 
     return z_stat, p_val
 
+# ---------- COMPLETION RATE HYPOTHESIS TEST ----------
 
 def hypothesis_completion_rate(df_last_visit, alpha=0.05):
     """Run completion rate hypothesis test and print full interpretation."""
@@ -268,6 +272,7 @@ def hypothesis_completion_rate(df_last_visit, alpha=0.05):
 
 # ---------- OUTLIER CLEANING ----------
 def remove_outliers_iqr(group):
+    """Remove outliers using IQR method for time_from_prev_step."""
     Q1 = group['time_from_prev_step'].quantile(0.25)
     Q3 = group['time_from_prev_step'].quantile(0.75)
     IQR = Q3 - Q1
@@ -310,7 +315,7 @@ def compare_step_durations(df):
     # Remove outliers
     df_clean = (
         df.groupby(['Variation', 'step_label'], group_keys=False)
-        .apply(remove_outliers_iqr)
+        .apply(remove_outliers_iqr, include_groups=False)
         .reset_index(drop=True)
     )
 
@@ -346,11 +351,18 @@ def plot_kpis(error_rate, completion_rate, save_dir="results/plots"):
 
     # --- Error Rate ---
     plt.figure(figsize=(6, 5))
+    error_df = pd.DataFrame({
+        'Variation': error_rate.index,
+        'Error Rate (%)': error_rate.values * 100
+    })
     sns.barplot(
-        x=error_rate.index,
-        y=error_rate.values * 100,
+        data=error_df,
+        x='Variation',
+        y='Error Rate (%)',
+        hue='Variation',
         palette=palette,
-        order=["Test", "Control"]
+        order=["Test", "Control"],
+        legend=False
     )
     plt.title("Error Rate per Visit by Variation")
     plt.xlabel("Variation")
@@ -362,11 +374,18 @@ def plot_kpis(error_rate, completion_rate, save_dir="results/plots"):
 
     # --- Completion Rate ---
     plt.figure(figsize=(6, 5))
+    completion_df = pd.DataFrame({
+        'Variation': completion_rate.index,
+        'Completion Rate (%)': completion_rate.values * 100
+    })
     sns.barplot(
-        x=completion_rate.index,
-        y=completion_rate.values * 100,
+        data=completion_df,
+        x='Variation',
+        y='Completion Rate (%)',
+        hue='Variation',
         palette=palette,
-        order=["Test", "Control"]
+        order=["Test", "Control"],
+        legend=False
     )
     plt.title("Completion Rate by Variation")
     plt.xlabel("Variation")
